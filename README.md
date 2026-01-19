@@ -24,7 +24,7 @@ This repository documents Bendset, an anonymized Databend query workload release
 ## Main Dataset
 The main CSV files contain one record per query ordered by `event_time`. Alongside the raw identifiers (`query_id`, `current_database`, `sql_user`, all hashed), each row includes:
 - **Timing**: `query_start_time`, `event_time`, `query_queued_duration_ms`, `query_duration_ms`.
-- **Classification**: `query_kind`, `query_parameterized`, `query_parameterized_hash`, `log_type_name`.
+- **Classification**: `query_kind`, `query_hash`, `query_parameterized_hash`, `log_type_name`.
 - **Scan/Write volume**: `scan_rows`, `scan_bytes`, `scan_io_bytes_cost_ms`, `written_rows`, `written_bytes`, `written_io_bytes`, `written_io_bytes_cost_ms`.
 - **Results**: `result_rows`, `result_bytes`.
 - **Resource tracking**: `peek_memory_usage` (aggregated across fragments) and `node_num` (number of fragments/operators observed).
@@ -36,7 +36,7 @@ The `query_id` column uniquely identifies each query and serves as the join key 
 The `example.csv` file in this repository contains the first few rows of a processed slice and mirrors the layout of the public snapshot. A short excerpt is shown below:
 
 ```csv
-query_id,cpu_time_sum,scan_bytes_from_local_disk_sum,scan_bytes_from_data_cache_sum,scan_bytes_from_remote_sum,hash_join_nodes,aggregate_partial_nodes,sort_nodes,produced_rows,query_start_time,event_time,query_queued_duration_ms,query_duration_ms,query_kind,query_parameterized,query_parameterized_hash,log_type_name,scan_rows,scan_bytes,scan_io_bytes_cost_ms,written_rows,written_bytes,written_io_bytes,written_io_bytes_cost_ms,result_rows,result_bytes,peek_memory_usage,current_database,sql_user,node_num
+query_id,cpu_time_sum,scan_bytes_from_local_disk_sum,scan_bytes_from_data_cache_sum,scan_bytes_from_remote_sum,hash_join_nodes,aggregate_partial_nodes,sort_nodes,produced_rows,query_start_time,event_time,query_queued_duration_ms,query_duration_ms,query_kind,query_hash,query_parameterized_hash,log_type_name,scan_rows,scan_bytes,scan_io_bytes_cost_ms,written_rows,written_bytes,written_io_bytes,written_io_bytes_cost_ms,result_rows,result_bytes,peek_memory_usage,current_database,sql_user,node_num
 019b03d74a747df3a4d250ebb7ef43c1,29116853.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,2025-12-09 15:59:59.620594+00:00,2025-12-09 16:00:00.007417+00:00,0.0,386.0,CopyIntoTable,,,Finish,278.0,152064.0,0.0,278.0,786253.0,6389.0,0.0,0.0,0.0,263573309.0,c21f969b5f03d33d43e04f8f136e7682,269c24d5505ad4801e3238c586a1f52c,1
 70010100-95eb-4a5a-8e75-4d4557780776,2572887.0,0.0,0.0,0.0,2.0,0.0,0.0,0.0,2025-12-09 15:59:59.199122+00:00,2025-12-09 16:00:00.009906+00:00,518.0,810.0,Query,,,Finish,1123.0,125183.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,21085030.0,c21f969b5f03d33d43e04f8f136e7682,1eefadf0ae4d5031dae553197fba763f,1
 ```
