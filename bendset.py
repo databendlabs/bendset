@@ -37,6 +37,8 @@ SELECT
     query_queued_duration_ms,
     query_duration_ms,
     query_kind,
+    query_parameterized,
+    query_parameterized_hash,
     log_type_name,
     scan_rows,
     scan_bytes,
@@ -60,6 +62,8 @@ QUERY_COLUMNS = [
     "query_queued_duration_ms",
     "query_duration_ms",
     "query_kind",
+    "query_parameterized",
+    "query_parameterized_hash",
     "log_type_name",
     "scan_rows",
     "scan_bytes",
@@ -183,6 +187,7 @@ def sum_peek_memory_usage(value: Any) -> float:
         return float(sum(_safe_number(v) for v in parsed))
     return _safe_number(parsed)
 
+
 def cal_node_num(value: Any) -> float:
     parsed = parse_variant_field(value)
     if isinstance(parsed, dict):
@@ -227,12 +232,15 @@ def flush_frames(frames: List[pd.DataFrame], output: Path, chunk_index: int) -> 
         return chunk_index
     combined = pd.concat(frames, ignore_index=True)
     chunk_path = chunk_output_path(output, chunk_index)
-    combined.to_csv(chunk_path, index=False, sep=',', encoding='utf-8')
+    combined.to_csv(chunk_path, index=False, sep=",", encoding="utf-8")
     print(f"Saved {len(combined)} joined rows to {chunk_path}")
     frames.clear()
     return chunk_index + 1
 
-def aggregate_profile_metrics(profiles_raw: Any, stats_desc_raw: Any) -> Dict[str, float]:
+
+def aggregate_profile_metrics(
+    profiles_raw: Any, stats_desc_raw: Any
+) -> Dict[str, float]:
     metrics: Dict[str, float] = {name: 0.0 for name, _ in STATISTIC_FIELDS}
     metrics.update({name: 0.0 for name, _ in NODE_PATTERNS})
     metrics["produced_rows"] = 0.0
@@ -304,7 +312,7 @@ def _format_ts(value: datetime) -> str:
 
 
 def compose_sql(template: str, db: str, start: datetime, end: datetime) -> str:
-    return template.format(db = db, start=_format_ts(start), end=_format_ts(end))
+    return template.format(db=db, start=_format_ts(start), end=_format_ts(end))
 
 
 def compose_join_sql(db: str, start: datetime, end: datetime) -> str:
@@ -404,19 +412,16 @@ def build_result_dataframe(
             entry["peek_memory_usage"] = peek_sum
             entry["node_num"] = cal_node_num(peek_value)
 
-    ordered_columns = (
-        ["query_id"]
-        + metric_keys
-        + QUERY_COLUMNS
-        + ["node_num"]
-    )
+    ordered_columns = ["query_id"] + metric_keys + QUERY_COLUMNS + ["node_num"]
     final_df = pd.DataFrame(results.values())
     final_df = final_df.reindex(columns=ordered_columns)
     return final_df
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Aggregate Databend profile statistics.")
+    parser = argparse.ArgumentParser(
+        description="Aggregate Databend profile statistics."
+    )
     parser.add_argument(
         "--dsn",
         default=os.environ.get("DATABEND_DSN"),
@@ -436,7 +441,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--db",
         required=False,
-        default='system_history',
+        default="system_history",
         help="Start date (YYYY-MM-DD)",
     )
     parser.add_argument(
@@ -446,7 +451,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--debug",
-        action='store_true',
+        action="store_true",
         help="debug or not",
     )
     parser.add_argument(
@@ -473,8 +478,8 @@ def main() -> None:
 
     step_threshold = parse_step_value(args.step)
     if args.debug:
-        pd.set_option('display.max_rows', None)
-        pd.set_option('display.max_columns', None)
+        pd.set_option("display.max_rows", None)
+        pd.set_option("display.max_columns", None)
 
     client = BlockingDatabendClient(args.dsn)
     conn = client.get_conn()
@@ -528,5 +533,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-
