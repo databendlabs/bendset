@@ -334,6 +334,8 @@ SELECT
     query_data.query_queued_duration_ms,
     query_data.query_duration_ms,
     query_data.query_kind,
+    query_data.query_hash,
+    query_data.query_parameterized_hash,
     query_data.log_type_name,
     query_data.scan_rows,
     query_data.scan_bytes,
