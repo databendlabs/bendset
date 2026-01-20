@@ -1,9 +1,9 @@
 # Bendset Dataset
 
-This repository documents Bendset, an anonymized Databend query workload released to make it easier to study large-scale, cloud data warehouse behavior. The dataset captures 39 million production queries executed between **2025‑12‑09** and **2025‑12‑11** and ships with scripts to reproduce the curated CSV files or generate new slices directly from your own Databend history tables.
+This repository documents Bendset, an anonymized Databend query workload released to make it easier to study large-scale, cloud data warehouse behavior. The dataset captures 80 million production queries executed and ships with scripts to reproduce the curated CSV files or generate new slices directly from your own Databend history tables.
 
 ## Overview
-- **Public snapshot**: https://sharing.databend.cloud/bendset/bendset-2025-12-11.tar.gz (39 M queries, CSV chunks).
+- **Public snapshot**: https://sharing.databend.cloud/bendset/bendset-2026-01-20.tar.gz (80 M queries, CSV chunks).
 - **Source tables**: `system_history.query_history` and `system_history.profile_history`, joined per query to keep execution profiles next to user-visible statistics.
 - **Granularity**: one row per query with timing, I/O, resource usage, queueing, result sizes, anonymized database/user identifiers, and profile-derived operator metrics.
 - **License**: see `LICENSE`.
@@ -11,8 +11,8 @@ This repository documents Bendset, an anonymized Databend query workload release
 ## Quick Start
 1. Download and extract the latest archive.
    ```bash
-   curl -LO https://sharing.databend.cloud/bendset/bendset-2025-12-11.tar.gz
-   tar -xzf bendset-2025-12-11.tar.gz
+   curl -LO https://sharing.databend.cloud/bendset/bendset-2026-01-20.tar.gz
+   tar -xzf bendset-2026-01-20.tar.gz
    ```
 2. (Optional) Regenerate a fresh slice from your Databend history service:
    ```bash
