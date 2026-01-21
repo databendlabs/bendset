@@ -60,7 +60,7 @@ Use this file as a quick sanity check for downstream pipelines or to verify that
 | `query_queued_duration_ms` | Milliseconds spent waiting in the scheduler before execution. |
 | `query_duration_ms` | Milliseconds spent executing (between start and finish). |
 | `query_kind` | Statement category such as `Query`, `CopyIntoTable`, etc. |
-| `query_parameterized` | Parameterized version of the query (with literal values replaced by placeholders). |
+| `query_hash` |  Hash of the whole query.|
 | `query_parameterized_hash` | Hash of the parameterized query for grouping similar queries. |
 | `log_type_name` | Lifecycle stage captured by the history row (e.g., `Finish`, `Exception`). |
 | `scan_rows` | Total rows scanned from storage. |
