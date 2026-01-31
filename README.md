@@ -3,7 +3,7 @@
 This repository documents Bendset, an anonymized Databend query workload released to make it easier to study large-scale, cloud data warehouse behavior. The dataset captures 80 million production queries executed and ships with scripts to reproduce the curated CSV files or generate new slices directly from your own Databend history tables.
 
 ## Overview
-- **Public snapshot**: https://sharing.databend.cloud/bendset/bendset-2026-01-20.tar.gz (80 M queries, CSV chunks).
+- **Public snapshot**: https://sharing.databend.cloud/bendset/bendset-2026-01-20.tar.gz (40 M queries, CSV chunks).
 - **Source tables**: `system_history.query_history` and `system_history.profile_history`, joined per query to keep execution profiles next to user-visible statistics.
 - **Granularity**: one row per query with timing, I/O, resource usage, queueing, result sizes, anonymized database/user identifiers, and profile-derived operator metrics.
 - **License**: see `LICENSE`.
